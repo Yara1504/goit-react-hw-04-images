@@ -13,13 +13,11 @@ const App = () => {
   const [images, setImages] = useState([]);
   const [modalWindow, setModalWindow] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState('');
-  const [error, setError] = useState(null);
   
     useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        setError(null);
 
         const { hits } = await fetchImages(search, page);
       
@@ -38,8 +36,6 @@ const App = () => {
           }));
           setImages(prevImages => [...prevImages, ...newImages]);
         }
-      } catch (error) {
-        setError(error);
       } finally {
         setLoading(false);
       }
@@ -51,7 +47,6 @@ const App = () => {
     setSearch(search);
     setPage(1);
     setImages([]);
-    setError(null);
   };
 
   const loadMore = () => {

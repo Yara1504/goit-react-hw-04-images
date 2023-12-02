@@ -19,7 +19,7 @@ const Modal = ({ currentImageUrl, onClose }) => {
     return () => {
       window.removeEventListener('keydown', handleEsc);
     };
-  }, []);
+  }, [handleEsc]);
 
     return (
       <div className={css.Overlay} onClick={handleOverlay}>

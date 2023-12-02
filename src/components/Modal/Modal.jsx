@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import css from './Modal.module.css';
 
 const Modal = ({ currentImageUrl, onClose }) => {
-  const handleEsc = event => {
+  const handleEsc = useCallback((event) => {
     if (event.key === 'Escape') {
       onClose();
     }
-  };
+  }, [onClose]);
 
-  const handleOverlay = event => {
+  const handleOverlay = useCallback((event) => {
     if (event.currentTarget === event.target) {
       onClose();
     }
-  };
+  }, [onClose]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleEsc);
@@ -21,17 +21,17 @@ const Modal = ({ currentImageUrl, onClose }) => {
     };
   }, [handleEsc]);
 
-    return (
-      <div className={css.Overlay} onClick={handleOverlay}>
-        <div className={css.Modal}>
-          <img
-            src={currentImageUrl}
-            alt=""
-            loading="lazy"
-          />
-        </div>
+  return (
+    <div className={css.Overlay} onClick={handleOverlay}>
+      <div className={css.Modal}>
+        <img
+          src={currentImageUrl}
+          alt=""
+          loading="lazy"
+        />
       </div>
-    );
-  }
+    </div>
+  );
+}
 
 export default Modal;

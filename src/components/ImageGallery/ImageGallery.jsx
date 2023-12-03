@@ -4,9 +4,9 @@ import css from './ImageGallery.module.css';
 function ImageGallery({ images, handleModalWindow }) {
   return (
     <ul className={css.ImageGallery}>
-      {images.map(({ id, webformatURL, largeImageURL }) => (
+      {images.map(({ webformatURL, largeImageURL }) => (
         <ImageGalleryItem
-          key={id}
+          key={webformatURL}
           webformatURL={webformatURL}
           largeImageURL={largeImageURL}
           handleModalWindow={handleModalWindow}

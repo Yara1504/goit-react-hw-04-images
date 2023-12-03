@@ -13,35 +13,33 @@ const App = () => {
   const [images, setImages] = useState([]);
   const [modalWindow, setModalWindow] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState('');
+  const [total, setTotal] = useState(0);
   
-    useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  const allPage = Math.ceil(total / 12);
+  const showBtn = images.length > 0 && page < allPage;
 
-        const { hits } = await fetchImages(search, page);
+  useEffect(() => {
       
-        if (page === 1) {
-          const imagesArray = hits.map(hit => ({
-            id: hit.id,
-            webformatURL: hit.webformatURL,
-            largeImageURL: hit.largeImageURL,
-          }));
-          setImages(imagesArray);
-        } else {
-          const newImages = hits.map(hit => ({
-            id: hit.id,
-            webformatURL: hit.webformatURL,
-            largeImageURL: hit.largeImageURL,
-          }));
-          setImages(prevImages => [...prevImages, ...newImages]);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [search, page]);
+    if (search === '') {
+      return;
+    }
+
+async function fetchData() {
+  try {
+    setLoading(true);
+    const response = await fetchImages(search, page); 
+    const total = response.totalHits; 
+    const images = response.hits;
+
+    setImages(prevImages => [...prevImages, ...images]);
+
+    setTotal(total);
+  } finally {
+    setLoading(false);
+  }
+}
+
+    fetchData();}, [search, page]);
      
   const searchImg = search => {
     setSearch(search);
@@ -63,7 +61,7 @@ const App = () => {
       <Searchbar onSubmit={searchImg} />
       {images && <ImageGallery images={images} handleModalWindow={handleModalWindow} />}
       {loading && <Loader />}
-      {images.length >= 12 && <Button loadMore={loadMore} />}
+      {showBtn && <Button loadMore={loadMore} />}
       {modalWindow && (
         <Modal
           currentImageUrl={currentImageUrl}
